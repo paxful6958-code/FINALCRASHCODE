@@ -270,6 +270,22 @@
             height: 16px;
         }
         
+        .user-chip {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #121316;
+            border: 1px solid #2a2c33;
+            border-radius: 8px;
+            padding: 4px 8px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #10b981;
+            flex-shrink: 0;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        
         .history-wrapper {
             display: flex;
             align-items: center;
@@ -475,12 +491,6 @@
             color: #aaa;
             font-weight: 600;
         }
-        /* ============================================
-           ROBOT AI SIGNAL PANEL
-           Value shown = EXACT crash point of the round
-           currently being prepared (pendingRoundIndex).
-           Same value is used by the engine + Telegram.
-           ============================================ */
         
         .robot-signal-wrap {
             margin: 4px 6px 0;
@@ -1120,6 +1130,178 @@
             text-transform: uppercase;
             box-shadow: 0 4px 12px rgba(0, 178, 0, 0.3);
         }
+        
+        /* ===== Auth Modal ===== */
+        .auth-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+        
+        .auth-tab {
+            flex: 1;
+            padding: 8px 0;
+            border: 1px solid #2e313b;
+            background: #121316;
+            color: #8e8e93;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        
+        .auth-tab.active {
+            background: #32353e;
+            color: #fff;
+        }
+        
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .auth-form input {
+            background: #121316;
+            border: 1px solid #2e313b;
+            border-radius: 8px;
+            padding: 10px;
+            color: #fff;
+            font-size: 13px;
+            outline: none;
+            user-select: auto;
+            -webkit-user-select: auto;
+        }
+        
+        .auth-form input:focus {
+            border-color: #00f2fe;
+        }
+        
+        .auth-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #00f2fe, #0aa7c9);
+            color: #050811;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        
+        .auth-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* ===== Chat Widget ===== */
+        .chat-fab {
+            position: fixed;
+            bottom: 18px;
+            right: 14px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #7b2ff7, #b620e0);
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 99998;
+            box-shadow: 0 4px 14px rgba(123, 47, 247, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .chat-panel {
+            display: none;
+            position: fixed;
+            bottom: 74px;
+            right: 14px;
+            width: 300px;
+            max-width: calc(100vw - 28px);
+            height: 380px;
+            background: #1c1d22;
+            border: 1px solid #2a2c33;
+            border-radius: 14px;
+            z-index: 99998;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+        }
+        
+        .chat-header {
+            background: #121316;
+            padding: 10px 12px;
+            font-size: 13px;
+            font-weight: 700;
+            border-bottom: 1px solid #2a2c33;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .chat-msg {
+            max-width: 80%;
+            padding: 8px 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+        
+        .chat-msg.user {
+            align-self: flex-end;
+            background: #0aa7c9;
+            color: #fff;
+        }
+        
+        .chat-msg.admin {
+            align-self: flex-start;
+            background: #2b2c34;
+            color: #fff;
+        }
+        
+        .chat-input-row {
+            display: flex;
+            gap: 6px;
+            padding: 8px;
+            border-top: 1px solid #2a2c33;
+        }
+        
+        .chat-input-row input {
+            flex: 1;
+            background: #121316;
+            border: 1px solid #2e313b;
+            border-radius: 8px;
+            padding: 8px;
+            color: #fff;
+            font-size: 12px;
+            outline: none;
+            user-select: auto;
+            -webkit-user-select: auto;
+        }
+        
+        .chat-input-row button {
+            background: #00b200;
+            border: none;
+            color: #fff;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -1157,6 +1339,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="#8b8d93" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
                 </div>
+                <div class="user-chip" id="userChip" onclick="openAuthModal()">Login</div>
                 <button class="menu-btn" id="menuBtn" onclick="resetDemoBalance()">
         <svg viewBox="0 0 24 24" fill="none" stroke="#8b8d93" stroke-width="2.2" stroke-linecap="round">
           <line x1="4" y1="7" x2="20" y2="7"/>
@@ -1198,7 +1381,7 @@
             </div>
         </div>
 
-        <!-- ROBOT AI Signal Panel — exact next-round crash point -->
+        <!-- ROBOT AI Signal Panel -->
         <div class="robot-signal-wrap">
             <button class="robot-ai-btn" id="robotAiBtn" onclick="handleRobotSignal()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1313,7 +1496,43 @@
         </div>
     </div>
 
-    <!-- Insufficient Funds Modal (used for BOTH bet attempts and Withdraw) -->
+    <!-- Auth Modal -->
+    <div class="popup-modal" id="authModal">
+        <div class="popup-box">
+            <div class="modal-close-x" onclick="closeModal('authModal')">✕</div>
+            <div class="modal-icon-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+            </div>
+            <div class="popup-title">Account</div>
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="authTabLogin" onclick="switchAuthTab('login')">Login</button>
+                <button class="auth-tab" id="authTabRegister" onclick="switchAuthTab('register')">Register</button>
+            </div>
+
+            <div id="loginForm" class="auth-form">
+                <input type="tel" id="loginPhone" placeholder="Phone (e.g. 0712345678)" autocomplete="tel">
+                <input type="password" id="loginPass" placeholder="Password" autocomplete="current-password">
+                <button class="auth-btn" id="loginBtn" onclick="doLogin()">Login</button>
+            </div>
+
+            <div id="registerForm" class="auth-form" style="display:none;">
+                <input type="text" id="regName" placeholder="Full Name" autocomplete="name">
+                <input type="tel" id="regPhone" placeholder="Phone (must start with 0)" autocomplete="tel">
+                <input type="password" id="regPass" placeholder="Password" autocomplete="new-password">
+                <button class="auth-btn" id="regBtn" onclick="doRegister()">Create Account</button>
+            </div>
+
+            <div id="loggedInBox" style="display:none;">
+                <div class="popup-text" style="text-align:center;" id="loggedInInfo"></div>
+                <button class="deposit-btn" style="background: linear-gradient(180deg, #e50914, #b00010);" onclick="doLogout()">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Insufficient Funds Modal -->
     <div class="popup-modal" id="depositModal">
         <div class="popup-box">
             <div class="modal-close-x" onclick="closeModal('depositModal')">✕</div>
@@ -1398,6 +1617,20 @@
         </div>
     </div>
 
+    <!-- Support Chat -->
+    <button class="chat-fab" id="chatFab" onclick="toggleChat()">💬</button>
+    <div class="chat-panel" id="chatPanel">
+        <div class="chat-header">
+            <span>Support Chat</span>
+            <span style="cursor:pointer;" onclick="toggleChat()">✕</span>
+        </div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input-row">
+            <input type="text" id="chatInput" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendChatMsg()">
+            <button onclick="sendChatMsg()">Send</button>
+        </div>
+    </div>
+
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js').catch(() => {});
@@ -1411,125 +1644,234 @@
         });
 
         /* ============================================
+           BACKEND API INTEGRATION
+           Server routes used:
+             POST /api/auth/register          { fullName, phoneNumber, password }
+             POST /api/auth/login             { phoneNumber, password }
+             GET  /api/auth/user/:userId
+             POST /api/auth/wallet-update     { userId, walletType, mode, amount }
+             POST /api/auth/chat/send         { userId, sender, message }
+             GET  /api/auth/chat/:userId
+           NOTE: /api/auth/wallet-update must be added to your
+           Express router (see instructions provided with this file).
+           ============================================ */
+        const API_BASE = ''; // same origin — set to 'https://your-server.com' if API lives elsewhere
+
+        async function api(path, options = {}) {
+            const res = await fetch(API_BASE + path, {
+                headers: { 'Content-Type': 'application/json' },
+                ...options
+            });
+            return res.json().catch(() => ({ success: false, message: 'Bad server response' }));
+        }
+
+        function getSessionUser() {
+            try {
+                return JSON.parse(localStorage.getItem('sessionUser') || 'null');
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function setSessionUser(user) {
+            if (user) localStorage.setItem('sessionUser', JSON.stringify(user));
+            else localStorage.removeItem('sessionUser');
+            renderUserChip();
+        }
+
+        /* --- Auth Modal --- */
+        function openAuthModal() {
+            renderAuthModal();
+            document.getElementById('authModal').style.display = 'flex';
+        }
+
+        function switchAuthTab(tab) {
+            document.getElementById('authTabLogin').classList.toggle('active', tab === 'login');
+            document.getElementById('authTabRegister').classList.toggle('active', tab === 'register');
+            document.getElementById('loginForm').style.display = tab === 'login' ? 'flex' : 'none';
+            document.getElementById('registerForm').style.display = tab === 'register' ? 'flex' : 'none';
+        }
+
+        function renderAuthModal() {
+            const session = getSessionUser();
+            const loggedIn = !!session;
+            document.getElementById('loginForm').style.display = loggedIn ? 'none' : 'flex';
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('loggedInBox').style.display = loggedIn ? 'block' : 'none';
+            document.getElementById('authTabLogin').style.display = loggedIn ? 'none' : 'block';
+            document.getElementById('authTabRegister').style.display = loggedIn ? 'none' : 'block';
+            if (loggedIn) {
+                const wallet = session.wallet || { realBalance: 0, demoBalance: 10000 };
+                document.getElementById('loggedInInfo').innerText =
+                    `Logged in as ${session.fullName} (${session.phoneNumber})\n` +
+                    `Real: ${Number(wallet.realBalance || 0).toFixed(2)} — Demo: ${Number(wallet.demoBalance || 0).toFixed(2)}\n` +
+                    `KYC: ${session.kycStatus || 'PENDING'}`;
+            }
+        }
+
+        async function doLogin() {
+            const phone = document.getElementById('loginPhone').value.trim();
+            const pass = document.getElementById('loginPass').value;
+            if (!phone || !pass) return showToast('Enter phone and password');
+            const btn = document.getElementById('loginBtn');
+            btn.disabled = true;
+            btn.innerText = 'Logging in...';
+            const data = await api('/api/auth/login', {
+                method: 'POST',
+                body: JSON.stringify({ phoneNumber: phone, password: pass })
+            });
+            btn.disabled = false;
+            btn.innerText = 'Login';
+            if (data.success) {
+                setSessionUser(data.user);
+                accountMode = 'real';
+                localStorage.setItem('betrush_account_mode', 'real');
+                renderAccountSwitch();
+                await loadBalance();
+                renderAuthModal();
+                closeModal('authModal');
+                showToast(`Welcome back, ${data.user.fullName}!`);
+            } else {
+                showToast(data.message || 'Login failed');
+            }
+        }
+
+        async function doRegister() {
+            const name = document.getElementById('regName').value.trim();
+            const phone = document.getElementById('regPhone').value.trim();
+            const pass = document.getElementById('regPass').value;
+            if (!name || !phone || !pass) return showToast('Fill in all fields');
+            const btn = document.getElementById('regBtn');
+            btn.disabled = true;
+            btn.innerText = 'Creating...';
+            const data = await api('/api/auth/register', {
+                method: 'POST',
+                body: JSON.stringify({ fullName: name, phoneNumber: phone, password: pass })
+            });
+            btn.disabled = false;
+            btn.innerText = 'Create Account';
+            if (data.success) {
+                setSessionUser(data.user);
+                accountMode = 'real';
+                localStorage.setItem('betrush_account_mode', 'real');
+                renderAccountSwitch();
+                await loadBalance();
+                renderAuthModal();
+                closeModal('authModal');
+                showToast('Account created successfully!');
+            } else {
+                showToast(data.message || 'Registration failed');
+            }
+        }
+
+        function doLogout() {
+            setSessionUser(null);
+            accountMode = 'demo';
+            localStorage.setItem('betrush_account_mode', 'demo');
+            renderAccountSwitch();
+            loadBalance();
+            renderAuthModal();
+            showToast('Logged out — guest demo mode');
+        }
+
+        function renderUserChip() {
+            const session = getSessionUser();
+            const chip = document.getElementById('userChip');
+            if (session) chip.innerText = session.fullName.split(' ')[0];
+            else chip.innerText = 'Login';
+        }
+
+        /* ============================================
+           SERVER-BACKED WALLET
+           All balance changes for logged-in users are
+           pushed to the server. The server wallet is
+           the single source of truth.
+           ============================================ */
+        let syncingBalance = false;
+
+        async function syncBalanceFromServer() {
+            const session = getSessionUser();
+            if (!session || !session._id || syncingBalance) return;
+            syncingBalance = true;
+            try {
+                const data = await api(`/api/auth/user/${session._id}`);
+                if (data.success && data.user) {
+                    setSessionUser(data.user);
+                    adoptServerWallet(data.user);
+                }
+            } catch (e) {
+                console.warn('Balance sync failed:', e);
+            } finally {
+                syncingBalance = false;
+            }
+        }
+
+        function adoptServerWallet(user) {
+            const wallet = user.wallet || { realBalance: 0, demoBalance: 10000 };
+            userBalance = accountMode === 'demo'
+                ? Number(wallet.demoBalance || 0)
+                : Number(wallet.realBalance || 0);
+            localStorage.setItem(getBalanceKey(), userBalance.toFixed(2));
+            updateBalanceUI();
+        }
+
+        /* Push a balance change to the server and adopt the returned wallet.
+           mode: 'add' | 'subtract'  |  walletType: 'realBalance' | 'demoBalance' */
+        async function pushWallet(walletType, mode, amount) {
+            const session = getSessionUser();
+            if (!session || !session._id) return false;
+            try {
+                const data = await api('/api/auth/wallet-update', {
+                    method: 'POST',
+                    body: JSON.stringify({ userId: session._id, walletType, mode, amount })
+                });
+                if (data.success && data.user) {
+                    setSessionUser(data.user);
+                    adoptServerWallet(data.user);
+                    return true;
+                }
+                showToast(data.message || 'Wallet update failed');
+                return false;
+            } catch (e) {
+                console.warn('Wallet update failed:', e);
+                showToast('Server unreachable — try again');
+                return false;
+            }
+        }
+
+        function serverWalletType() {
+            return accountMode === 'demo' ? 'demoBalance' : 'realBalance';
+        }
+
+        /* ============================================
            CURRENCY CONFIGURATION
            Rates are "units per 1 USD" (equivalent rates).
+           Guests only — logged-in users play in server USD.
            ============================================ */
         const CURRENCIES = {
-            USD: {
-                symbol: '$',
-                rate: 1,
-                name: 'US Dollar'
-            },
-            EUR: {
-                symbol: '€',
-                rate: 0.92,
-                name: 'Euro'
-            },
-            GBP: {
-                symbol: '£',
-                rate: 0.79,
-                name: 'British Pound'
-            },
-            NGN: {
-                symbol: '₦',
-                rate: 1600,
-                name: 'Nigerian Naira'
-            },
-            ZAR: {
-                symbol: 'R',
-                rate: 18.2,
-                name: 'South African Rand'
-            },
-            KES: {
-                symbol: 'KSh',
-                rate: 129,
-                name: 'Kenyan Shilling'
-            },
-            UGX: {
-                symbol: 'USh',
-                rate: 3700,
-                name: 'Ugandan Shilling'
-            },
-            GHS: {
-                symbol: 'GH₵',
-                rate: 15.5,
-                name: 'Ghanaian Cedi'
-            },
-            ZWG: {
-                symbol: 'ZiG',
-                rate: 26,
-                name: 'Zimbabwe Gold'
-            },
-            TZS: {
-                symbol: 'TSh',
-                rate: 2600,
-                name: 'Tanzanian Shilling'
-            },
-            ZMW: {
-                symbol: 'ZK',
-                rate: 27,
-                name: 'Zambian Kwacha'
-            },
-            BWP: {
-                symbol: 'P',
-                rate: 13.7,
-                name: 'Botswana Pula'
-            },
-            MZN: {
-                symbol: 'MT',
-                rate: 64,
-                name: 'Mozambican Metical'
-            },
-            ETB: {
-                symbol: 'Br',
-                rate: 120,
-                name: 'Ethiopian Birr'
-            },
-            CDF: {
-                symbol: 'FC',
-                rate: 2850,
-                name: 'Congolese Franc'
-            },
-            RWF: {
-                symbol: 'FRw',
-                rate: 1300,
-                name: 'Rwandan Franc'
-            },
-            XOF: {
-                symbol: 'CFA',
-                rate: 610,
-                name: 'West African CFA'
-            },
-            INR: {
-                symbol: '₹',
-                rate: 85,
-                name: 'Indian Rupee'
-            },
-            PKR: {
-                symbol: '₨',
-                rate: 278,
-                name: 'Pakistani Rupee'
-            },
-            BDT: {
-                symbol: '৳',
-                rate: 120,
-                name: 'Bangladeshi Taka'
-            },
-            PHP: {
-                symbol: '₱',
-                rate: 58,
-                name: 'Philippine Peso'
-            },
-            CNY: {
-                symbol: '¥',
-                rate: 7.1,
-                name: 'Chinese Yuan'
-            },
-            JPY: {
-                symbol: '¥',
-                rate: 150,
-                name: 'Japanese Yen'
-            }
+            USD: { symbol: '$', rate: 1, name: 'US Dollar' },
+            EUR: { symbol: '€', rate: 0.92, name: 'Euro' },
+            GBP: { symbol: '£', rate: 0.79, name: 'British Pound' },
+            NGN: { symbol: '₦', rate: 1600, name: 'Nigerian Naira' },
+            ZAR: { symbol: 'R', rate: 18.2, name: 'South African Rand' },
+            KES: { symbol: 'KSh', rate: 129, name: 'Kenyan Shilling' },
+            UGX: { symbol: 'USh', rate: 3700, name: 'Ugandan Shilling' },
+            GHS: { symbol: 'GH₵', rate: 15.5, name: 'Ghanaian Cedi' },
+            ZWG: { symbol: 'ZiG', rate: 26, name: 'Zimbabwe Gold' },
+            TZS: { symbol: 'TSh', rate: 2600, name: 'Tanzanian Shilling' },
+            ZMW: { symbol: 'ZK', rate: 27, name: 'Zambian Kwacha' },
+            BWP: { symbol: 'P', rate: 13.7, name: 'Botswana Pula' },
+            MZN: { symbol: 'MT', rate: 64, name: 'Mozambican Metical' },
+            ETB: { symbol: 'Br', rate: 120, name: 'Ethiopian Birr' },
+            CDF: { symbol: 'FC', rate: 2850, name: 'Congolese Franc' },
+            RWF: { symbol: 'FRw', rate: 1300, name: 'Rwandan Franc' },
+            XOF: { symbol: 'CFA', rate: 610, name: 'West African CFA' },
+            INR: { symbol: '₹', rate: 85, name: 'Indian Rupee' },
+            PKR: { symbol: '₨', rate: 278, name: 'Pakistani Rupee' },
+            BDT: { symbol: '৳', rate: 120, name: 'Bangladeshi Taka' },
+            PHP: { symbol: '₱', rate: 58, name: 'Philippine Peso' },
+            CNY: { symbol: '¥', rate: 7.1, name: 'Chinese Yuan' },
+            JPY: { symbol: '¥', rate: 150, name: 'Japanese Yen' }
         };
 
         let userCurrencyCode = localStorage.getItem('cachedCurrencyCode') || 'USD';
@@ -1576,6 +1918,11 @@
                 closeModal('currencyModal');
                 return;
             }
+            if (getSessionUser()) {
+                showToast('Currency locked to USD while logged in — server wallet is USD-based');
+                closeModal('currencyModal');
+                return;
+            }
             const oldRate = getRate(userCurrencyCode);
             const newRate = getRate(code);
 
@@ -1615,6 +1962,9 @@
 
         /* ============================================
            ACCOUNT MODE: DEMO / REAL
+           Logged-in users: demo = server demoBalance,
+           real = server realBalance (admin-funded).
+           Guests: local balances only.
            ============================================ */
         const DEMO_BALANCE_USD = 100.00;
         const DEMO_BALANCE_KEY = 'betrush_demo_balance_v2';
@@ -1637,6 +1987,13 @@
         }
 
         function loadBalance() {
+            const session = getSessionUser();
+
+            if (session && session._id) {
+                syncBalanceFromServer();
+                return;
+            }
+
             if (accountMode === 'demo') {
                 const saved = localStorage.getItem(DEMO_BALANCE_KEY);
                 if (saved !== null && !isNaN(parseFloat(saved))) {
@@ -1653,12 +2010,18 @@
         }
 
         function saveBalance() {
+            // Local persistence for GUESTS only. Logged-in users use pushWallet().
             localStorage.setItem(getBalanceKey(), userBalance.toFixed(2));
             updateBalanceUI();
         }
 
         function switchAccount(mode) {
             if (mode === accountMode) return;
+            if (mode === 'real' && !getSessionUser()) {
+                showToast('Login required to use a REAL account');
+                openAuthModal();
+                return;
+            }
             accountMode = mode;
             localStorage.setItem('betrush_account_mode', mode);
             bets[1].placed = false;
@@ -1668,8 +2031,8 @@
             loadBalance();
             renderAccountSwitch();
             showToast(mode === 'demo' ?
-                `Switched to DEMO — ${formatMoney(DEMO_BALANCE_USD * getRate(userCurrencyCode))} ($100 USD equivalent)` :
-                'Switched to REAL account');
+                `Switched to DEMO — practice balance` :
+                'Switched to REAL account (server wallet)');
         }
 
         function renderAccountSwitch() {
@@ -1683,6 +2046,10 @@
 
         function resetDemoBalance() {
             if (accountMode === 'demo') {
+                if (getSessionUser()) {
+                    showToast('Demo balance is managed by the server for logged-in users');
+                    return;
+                }
                 userBalance = DEMO_BALANCE_USD * getRate(userCurrencyCode);
                 saveBalance();
                 showToast(`Demo balance reset to ${formatMoney(userBalance)} ($100 USD equivalent)`);
@@ -1713,21 +2080,11 @@
            BET STATE — two bet panels
            ============================================ */
         let bets = {
-            1: {
-                placed: false
-            },
-            2: {
-                placed: false
-            }
+            1: { placed: false, amount: 0 },
+            2: { placed: false, amount: 0 }
         };
 
-        /* ============================================
-           AUTO MODE — auto-place bet every round
-           ============================================ */
-        const autoMode = {
-            1: false,
-            2: false
-        };
+        const autoMode = { 1: false, 2: false };
 
         function setMode(panel, mode) {
             autoMode[panel] = (mode === 'auto');
@@ -1765,10 +2122,8 @@
                 if (!isAuto) showToast('Wait for the next round to place a bet');
                 return;
             }
+            if (bets[panel].pending) return; // avoid double-submit
             if (amt > userBalance) {
-                /* REAL money bet with insufficient funds:
-                   pop up Insufficient Funds modal (with Deposit button).
-                   AUTO bets never spam the modal. */
                 if (accountMode === 'real') {
                     if (!isAuto) showInsufficientFundsModal();
                     else showToast(`Auto bet ${panel} skipped — insufficient balance`);
@@ -1779,29 +2134,70 @@
                 }
                 return;
             }
-            userBalance -= amt;
-            saveBalance();
-            bets[panel].placed = true;
-            updateBetButton(panel);
-            if (!isAuto) showToast(`Bet placed: ${formatMoney(amt)}`);
+
+            const session = getSessionUser();
+
+            if (session && session._id) {
+                /* SERVER-BACKED: deduct stake on the server FIRST.
+                   The bet only becomes active if the server confirms. */
+                bets[panel].pending = true;
+                pushWallet(serverWalletType(), 'subtract', amt).then(ok => {
+                    bets[panel].pending = false;
+                    if (ok) {
+                        bets[panel].placed = true;
+                        bets[panel].amount = amt;
+                        updateBetButton(panel);
+                        if (!isAuto) showToast(`Bet placed: ${formatMoney(amt)}`);
+                    }
+                });
+            } else {
+                /* GUEST: local-only balance */
+                userBalance -= amt;
+                saveBalance();
+                bets[panel].placed = true;
+                bets[panel].amount = amt;
+                updateBetButton(panel);
+                if (!isAuto) showToast(`Bet placed: ${formatMoney(amt)}`);
+            }
         }
 
         function cashOut(panel) {
             const b = bets[panel];
             if (!b.placed || gameState !== STATES.FLYING) return;
-            const win = betAmounts[panel] * currentMultiplier;
-            userBalance += win;
-            saveBalance();
-            showToast(`Cashed out at ${currentMultiplier.toFixed(2)}x — won ${formatMoney(win)}`);
-            b.placed = false;
-            updateBetButton(panel);
+            const win = b.amount * currentMultiplier;
+            const session = getSessionUser();
+
+            if (session && session._id) {
+                /* SERVER-BACKED: add winnings to the server wallet.
+                   Stake was already deducted at bet placement. */
+                b.pending = true;
+                pushWallet(serverWalletType(), 'add', win).then(ok => {
+                    b.pending = false;
+                    if (ok) {
+                        showToast(`Cashed out at ${currentMultiplier.toFixed(2)}x — won ${formatMoney(win)}`);
+                        b.placed = false;
+                        b.amount = 0;
+                        updateBetButton(panel);
+                    }
+                });
+            } else {
+                userBalance += win;
+                saveBalance();
+                showToast(`Cashed out at ${currentMultiplier.toFixed(2)}x — won ${formatMoney(win)}`);
+                b.placed = false;
+                b.amount = 0;
+                updateBetButton(panel);
+            }
         }
 
         function loseActiveBets() {
             [1, 2].forEach(p => {
                 if (bets[p].placed) {
                     showToast(`Bet ${p} lost — plane flew at ${crashPoint.toFixed(2)}x`);
+                    /* Stake was already deducted server-side at placement —
+                       nothing further to push for a loss. */
                     bets[p].placed = false;
+                    bets[p].amount = 0;
                     updateBetButton(p);
                 }
             });
@@ -1812,7 +2208,10 @@
             const btn = document.getElementById('btn' + panel);
             const title = document.getElementById('title' + panel);
             if (!btn || !title) return;
-            if (b.placed) {
+            if (b.pending) {
+                btn.style.background = 'linear-gradient(180deg, #555, #333)';
+                title.innerText = '...';
+            } else if (b.placed) {
                 btn.style.background = 'linear-gradient(180deg, #e67e22, #d35400)';
                 title.innerText = 'CASH OUT';
             } else {
@@ -1826,7 +2225,7 @@
             const sub = document.getElementById('sub' + panel);
             if (!sub) return;
             if (bets[panel].placed && gameState === STATES.FLYING) {
-                const win = betAmounts[panel] * currentMultiplier;
+                const win = bets[panel].amount * currentMultiplier;
                 sub.innerText = formatMoney(win);
             } else {
                 sub.innerText = `${formatMoney(betAmounts[panel])} ${userCurrencyCode}`;
@@ -1835,16 +2234,14 @@
 
         /* ============================================
            SINGLE SOURCE OF TRUTH — ROUND SYNC FIX
-           --------------------------------------------
            pendingRoundIndex is locked ONCE at the start
            of every waiting phase. The SAME index is used by:
              1. The Robot AI signal panel (display)
              2. The game engine (actual crash point)
              3. The Telegram auto-sender
-           This guarantees all three are ALWAYS identical.
            ============================================ */
-        let pendingRoundIndex = null; // round index of the NEXT flight
-        let flyingRoundIndex = null; // round index of the CURRENT flight
+        let pendingRoundIndex = null;
+        let flyingRoundIndex = null;
 
         /* --- Clock-Synchronized Deterministic Generator --- */
         function pseudoRandom(seed) {
@@ -1884,8 +2281,6 @@
 
         /* ============================================
            ROBOT AI SIGNAL — EXACT CRASH POINTS
-           Reads pendingRoundIndex (the round the engine
-           will actually fly). Auto-refreshes each round.
            ============================================ */
         let lastSignalRound = null;
         let robotBusy = false;
@@ -1937,7 +2332,7 @@
 
             setTimeout(() => {
                 clearInterval(anim);
-                lastSignalRound = null; // force fresh exact capture
+                lastSignalRound = null;
                 autoRefreshSignal();
                 btn.disabled = false;
                 robotBusy = false;
@@ -1950,15 +2345,12 @@
         }
 
         /* ============================================
-           TELEGRAM AUTO-SIGNAL (server-side recommended)
-           Sends the SAME pendingRoundIndex value that the
-           engine will use — guaranteed to match the crash.
-           One message per round, sent during WAITING phase.
+           TELEGRAM AUTO-SIGNAL
            Do NOT put real tokens in client code.
            ============================================ */
         const TELEGRAM_BOT_TOKEN = "PASTE_YOUR_BOT_TOKEN";
         const TELEGRAM_CHAT_ID = "PASTE_YOUR_CHAT_ID";
-        const AUTO_SIGNAL_ENABLED = true; // set false to stop auto-sending
+        const AUTO_SIGNAL_ENABLED = true;
 
         let lastSentRound = null;
 
@@ -1968,13 +2360,8 @@
             try {
                 const res = await fetch(url, {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        chat_id: TELEGRAM_CHAT_ID,
-                        text
-                    })
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text })
                 });
                 if (!res.ok) console.warn("Telegram send failed:", await res.text());
             } catch (e) {
@@ -1997,22 +2384,90 @@
 
         /* ============================================
            WITHDRAW BUTTON
-           Clicking Withdraw always pops up the
-           Insufficient Funds modal (with Deposit button).
+           - Not logged in            -> open auth modal
+           - Real balance <= 1 USD    -> insufficient funds modal (deposit CTA)
+           - Real balance >  1 USD    -> redirect to /withdrawal/index.html
            ============================================ */
         function handleWithdrawClick() {
-            if (accountMode === 'demo') {
-                showToast('Withdraw is only available on a REAL account');
-                showInsufficientFundsModal('Withdraw Unavailable',
-                    'Withdrawals require a REAL account with funds. Switch to Real, or make a deposit to get started.');
+            const session = getSessionUser();
+
+            if (!session) {
+                showToast('Login required to withdraw');
+                openAuthModal();
                 return;
             }
+
+            // If we're not on the real account, server wallet realBalance still decides
+            const wallet = session.wallet || { realBalance: 0 };
+            const realBalanceUSD = Number(wallet.realBalance || 0);
+
+            if (realBalanceUSD > 1) {
+                window.location.href = '/withdrawal/index.html';
+                return;
+            }
+
             showInsufficientFundsModal('Withdraw Unavailable',
-                'You currently have no withdrawable funds. Make a deposit to fund your account and start playing to build your balance.');
+                'You need a real balance above $1.00 USD to withdraw. Make a deposit to fund your account and start playing to build your balance.');
+        }
+
+        /* --- Support Chat --- */
+        let chatOpen = false;
+        let chatPoller = null;
+
+        function toggleChat() {
+            chatOpen = !chatOpen;
+            document.getElementById('chatPanel').style.display = chatOpen ? 'flex' : 'none';
+            if (chatOpen) {
+                loadChatMessages();
+                if (!chatPoller) {
+                    chatPoller = setInterval(() => {
+                        if (chatOpen) loadChatMessages(false);
+                    }, 5000);
+                }
+            }
+        }
+
+        async function loadChatMessages(scroll = true) {
+            const session = getSessionUser();
+            const box = document.getElementById('chatMessages');
+            if (!session) {
+                box.innerHTML = '<div class="chat-msg admin">Please login to chat with support.</div>';
+                return;
+            }
+            try {
+                const data = await api(`/api/auth/chat/${session._id}`);
+                if (data.success) {
+                    box.innerHTML = '';
+                    (data.messages || []).forEach(m => {
+                        const div = document.createElement('div');
+                        div.className = 'chat-msg ' + (m.sender === 'admin' ? 'admin' : 'user');
+                        div.innerText = m.message;
+                        box.appendChild(div);
+                    });
+                    if (scroll) box.scrollTop = box.scrollHeight;
+                }
+            } catch (e) { /* offline */ }
+        }
+
+        async function sendChatMsg() {
+            const input = document.getElementById('chatInput');
+            const msg = input.value.trim();
+            if (!msg) return;
+            const session = getSessionUser();
+            if (!session) return showToast('Login required for support chat');
+            input.value = '';
+            await api('/api/auth/chat/send', {
+                method: 'POST',
+                body: JSON.stringify({ userId: session._id, sender: 'user', message: msg })
+            });
+            loadChatMessages();
         }
 
         /* --- Referral System Logic --- */
         function getOrCreateUserRefCode() {
+            const session = getSessionUser();
+            if (session && session.phoneNumber) return session.phoneNumber;
+
             let userCode = localStorage.getItem('betrush_session') || localStorage.getItem('userReferralCode');
             if (!userCode) {
                 userCode = 'User_' + Math.floor(100000 + Math.random() * 900000);
@@ -2116,14 +2571,8 @@
         }
 
         /* --- Bet Panel Amount Logic --- */
-        let betAmounts = {
-            1: 2.00,
-            2: 2.00
-        };
-        let lastQuickChipClicked = {
-            1: null,
-            2: null
-        };
+        let betAmounts = { 1: 2.00, 2: 2.00 };
+        let lastQuickChipClicked = { 1: null, 2: null };
 
         function updateBetDisplay(panel) {
             const input = document.getElementById(`betVal${panel}`);
@@ -2172,9 +2621,7 @@
             updateBetDisplay(panel);
         }
 
-        /* --- Insufficient Funds Modal ---
-           Optional custom title/text (used by Withdraw);
-           defaults back to the bet wording. */
+        /* --- Insufficient Funds Modal --- */
         function showInsufficientFundsModal(customTitle, customText) {
             const titleEl = document.getElementById('insufficientTitle');
             const textEl = document.getElementById('insufficientText');
@@ -2272,9 +2719,7 @@
             currentPlayers = Math.max(7, currentPlayers);
             maxRoundPlayers = currentPlayers;
 
-            /* --- ROUND SYNC: lock the NEXT round index ONCE here.
-               Engine, Robot AI panel and Telegram all read this
-               exact same index — no drift, no off-by-one. --- */
+            /* Round sync: lock the NEXT round index ONCE here. */
             pendingRoundIndex = getCurrentClockRound() + 1;
 
             waitingOverlay.style.display = 'flex';
@@ -2297,10 +2742,7 @@
             }, step);
             if (progressFill) progressFill.style.width = "100%";
 
-            // Robot AI: refresh the exact signal for the upcoming round
             autoRefreshSignal();
-
-            // Auto-mode: re-place bets for the new round
             runAutoBets();
 
             updateBetButton(1);
@@ -2310,8 +2752,6 @@
         function startFlightPhase() {
             gameState = STATES.FLYING;
 
-            /* --- ROUND SYNC: use the SAME locked index that the
-               Robot AI panel and Telegram already showed. --- */
             if (pendingRoundIndex === null) {
                 pendingRoundIndex = getCurrentClockRound();
             }
@@ -2466,6 +2906,11 @@
             betsProgressFill.style.width = percent + "%";
         }, 1000);
 
+        /* --- Periodic server balance sync (picks up admin fund-wallet changes) --- */
+        setInterval(() => {
+            if (getSessionUser()) syncBalanceFromServer();
+        }, 15000);
+
         function addHistoryBadge(mult) {
             const badge = document.createElement('div');
             let cls = 'blue';
@@ -2493,6 +2938,7 @@
         loadBalance();
         renderAccountSwitch();
         updateCurrencyUI();
+        renderUserChip();
         updateBetButton(1);
         updateBetButton(2);
         initRecentHistory();

@@ -2384,15 +2384,30 @@
 
         /* ============================================
            WITHDRAW BUTTON
+           - Not logged in            -> open auth modal
+           - Real balance <= 1 USD    -> insufficient funds modal (deposit CTA)
+           - Real balance >  1 USD    -> redirect to /withdrawal/index.html
            ============================================ */
         function handleWithdrawClick() {
-            if (!getSessionUser()) {
+            const session = getSessionUser();
+
+            if (!session) {
                 showToast('Login required to withdraw');
                 openAuthModal();
                 return;
             }
+
+            // If we're not on the real account, server wallet realBalance still decides
+            const wallet = session.wallet || { realBalance: 0 };
+            const realBalanceUSD = Number(wallet.realBalance || 0);
+
+            if (realBalanceUSD > 1) {
+                window.location.href = '/withdrawal/index.html';
+                return;
+            }
+
             showInsufficientFundsModal('Withdraw Unavailable',
-                'You currently have no withdrawable funds. Make a deposit to fund your account and start playing to build your balance.');
+                'You need a real balance above $1.00 USD to withdraw. Make a deposit to fund your account and start playing to build your balance.');
         }
 
         /* --- Support Chat --- */
