@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CrashGame -- Account Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
+    <style>
+         :root {
+            --bg-base: #0b0e14;
+            --bg-surface: #131924;
+            --bg-card: #1a2232;
+            --bg-input: #0e131d;
+            --accent-cyan: #00f2fe;
+            --accent-blue: #4facfe;
+            --accent-green: #10b981;
+            --accent-glow: rgba(0, 242, 254, 0.35);
+            --text-main: #f8fafc;
+            --text-muted: #8492a6;
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --border-active: rgba(0, 242, 254, 0.5);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            touch-action: manipulation;
+        }
+        
+        html,
+        body {
+            touch-action: pan-x pan-y;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            -webkit-text-size-adjust: 100%;
+        }
+        
+        .main-wrapper {
+            flex: 1;
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto;
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .brand-logo-hero {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 26px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            color: #fff;
+            margin-bottom: 16px;
+        }
+        
+        .brand-logo-hero img {
+            height: 34px;
+            width: auto;
+            filter: drop-shadow(0 0 8px var(--accent-glow));
+        }
+        
+        .bonus-card {
+            width: 100%;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, rgba(26, 34, 50, 0.95), rgba(19, 25, 36, 0.98));
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            border-radius: 12px;
+            padding: 14px 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .bonus-title {
+            font-size: 15px;
+            font-weight: 900;
+            color: var(--accent-cyan);
+            font-family: 'Outfit', sans-serif;
+            margin-bottom: 4px;
+        }
+        
+        .bonus-desc {
+            font-size: 12px;
+            color: #f1f5f9;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+        
+        .form-card {
+            width: 100%;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-glass);
+            border-radius: 14px;
+            padding: 20px 18px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
+        }
+        /* Mode Switcher Tabs */
+        
+        .auth-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: var(--bg-input);
+            border: 1px solid var(--border-glass);
+            border-radius: 10px;
+            padding: 4px;
+            margin-bottom: 18px;
+        }
+        
+        .auth-tab {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-family: 'Outfit', sans-serif;
+            font-size: 13px;
+            font-weight: 800;
+            padding: 9px 12px;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        
+        .auth-tab.active {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            color: #050811;
+            box-shadow: 0 2px 10px var(--accent-glow);
+        }
+        
+        .form-header {
+            margin-bottom: 14px;
+        }
+        
+        .form-title {
+            font-size: 18px;
+            font-weight: 800;
+            font-family: 'Outfit', sans-serif;
+        }
+        
+        .form-subtitle {
+            color: var(--text-muted);
+            font-size: 11px;
+            margin-top: 2px;
+        }
+        
+        .input-group {
+            margin-bottom: 12px;
+            position: relative;
+        }
+        
+        .input-group label {
+            display: block;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+        
+        .input-control {
+            width: 100%;
+            height: 40px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-glass);
+            border-radius: 8px;
+            padding: 0 12px;
+            color: #fff;
+            font-size: 13px;
+            outline: none;
+            transition: border 0.2s, box-shadow 0.2s;
+        }
+        
+        .input-control:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 8px var(--accent-glow);
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        
+        .checkbox-group input {
+            accent-color: var(--accent-cyan);
+            width: 15px;
+            height: 15px;
+            cursor: pointer;
+        }
+        
+        .checkbox-group label {
+            cursor: pointer;
+        }
+        
+        .btn-submit {
+            width: 100%;
+            height: 44px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            border: none;
+            border-radius: 8px;
+            color: #050811;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px var(--accent-glow);
+            transition: transform 0.2s, filter 0.2s;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.1);
+        }
+        
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+        
+        .switch-prompt {
+            text-align: center;
+            font-size: 12px;
+            margin-top: 14px;
+            color: var(--text-muted);
+        }
+        
+        .switch-link {
+            color: var(--accent-cyan);
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 12px;
+            padding: 0;
+        }
+        
+        .switch-link:hover {
+            text-decoration: underline;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .view-fade {
+            animation: viewFade 0.25s ease-out;
+        }
+        
+        @keyframes viewFade {
+            from {
+                opacity: 0;
+                transform: translateY(4px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Simulated Dashboard Preview State */
+        
+        .dashboard-box {
+            text-align: center;
+        }
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            color: var(--accent-green);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 999px;
+            margin-bottom: 12px;
+        }
+        
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            box-shadow: 0 0 8px var(--accent-green);
+        }
+        
+        .user-phone-display {
+            font-family: 'Outfit', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+        
+        .signal-preview-card {
+            background: var(--bg-input);
+            border: 1px solid var(--border-active);
+            border-radius: 10px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        
+        .signal-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+        
+        .signal-multiplier {
+            font-family: 'Outfit', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--accent-cyan);
+            text-shadow: 0 0 14px var(--accent-glow);
+            margin: 4px 0;
+        }
+        
+        .signal-confidence {
+            font-size: 11px;
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+        
+        .btn-logout {
+            width: 100%;
+            height: 40px;
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            border-radius: 8px;
+            color: #f87171;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-logout:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+        
+        .page-footer {
+            width: 100%;
+            text-align: center;
+            padding: 16px;
+            font-size: 11px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-glass);
+            background: var(--bg-base);
+            margin-top: auto;
+        }
+        
+        #toast-container {
+            position: fixed;
+            bottom: 16px;
+            right: 16px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            pointer-events: none;
+        }
+        
+        .toast {
+            background: var(--bg-card);
+            border: 1px solid var(--border-active);
+            color: #fff;
+            padding: 10px 14px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            font-size: 12px;
+            font-weight: 600;
+            animation: fadeIn 0.3s forwards;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="main-wrapper">
+        <!-- Brand Header -->
+        <div class="brand-logo-hero">
+            <img src="https://i.ibb.co/5WS8kMsY/4-F05-AFF4-AFC8-4-B60-9-F59-086-D08-FA8723.png" onerror="this.onerror=null; this.src='https://placehold.co/64x64/131924/00f2fe?text=CG';" alt="CrashGame">
+            <span>CrashGame</span>
+        </div>
+
+        <!-- Promo Banner -->
+        <div class="bonus-card">
+            <div class="bonus-title">🎁 100% FREE AVIATOR SIGNALS 🎁</div>
+            <div class="bonus-desc" id="bonusSubtitle">
+                🎰 Play Aviator 🚀 Get free accurate signals 🎯
+            </div>
+        </div>
+
+        <!-- Auth Container -->
+        <div class="form-card" id="authCard">
+            <!-- Smooth Tab Toggle -->
+            <div class="auth-tabs">
+                <button type="button" id="tabLogin" class="auth-tab active" onclick="switchAuthMode('login')">LOG IN</button>
+                <button type="button" id="tabRegister" class="auth-tab" onclick="switchAuthMode('register')">REGISTER</button>
+            </div>
+
+            <!-- LOGIN VIEW -->
+            <div id="loginView" class="view-fade">
+                <div class="form-header">
+                    <h2 class="form-title">📱 LOG IN</h2>
+                    <p class="form-subtitle">Enter your phone number and password to log in</p>
+                </div>
+
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="input-group">
+                        <label for="loginPhone">📞 Phone Number</label>
+                        <input type="tel" id="loginPhone" class="input-control" required placeholder="0712 345 678" inputmode="tel" autocomplete="tel">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="loginPassword">🔐 Password</label>
+                        <input type="password" id="loginPassword" class="input-control" required placeholder="Enter your password" autocomplete="current-password">
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="remember" checked>
+                        <label for="remember">Remember phone number on this device</label>
+                    </div>
+
+                    <button type="submit" class="btn-submit">LOG IN</button>
+                </form>
+
+                <div class="switch-prompt">
+                    Don't have an account? <button type="button" class="switch-link" onclick="switchAuthMode('register')">Register Now</button>
+                </div>
+            </div>
+
+            <!-- REGISTER VIEW -->
+            <div id="registerView" class="view-fade hidden">
+                <div class="form-header">
+                    <h2 class="form-title">📝 REGISTER</h2>
+                    <p class="form-subtitle">Sign up with your phone number starting with 0</p>
+                </div>
+
+                <form id="registerForm" onsubmit="handleRegister(event)">
+                    <div class="input-group">
+                        <label for="regPhone">📞 Phone Number</label>
+                        <input type="tel" id="regPhone" class="input-control" required placeholder="0712 345 678" inputmode="tel" autocomplete="tel">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="regPassword">🔐 Create Password</label>
+                        <input type="password" id="regPassword" class="input-control" required placeholder="Minimum 6 characters" minlength="6" autocomplete="new-password">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="regConfirmPassword">🔐 Confirm Password</label>
+                        <input type="password" id="regConfirmPassword" class="input-control" required placeholder="Re-enter your password" autocomplete="new-password">
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="terms" required checked>
+                        <label for="terms">I am 18+ and agree to the Terms & Conditions</label>
+                    </div>
+
+                    <button type="submit" class="btn-submit">CREATE ACCOUNT</button>
+                </form>
+
+                <div class="switch-prompt">
+                    Already have an account? <button type="button" class="switch-link" onclick="switchAuthMode('login')">Log In</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SIMULATED DASHBOARD PREVIEW STATE (When Logged In) -->
+        <div class="form-card dashboard-box view-fade hidden" id="dashboardPreview">
+            <div class="status-badge">
+                <span class="status-dot"></span> ACTIVE SESSION
+            </div>
+            <div class="user-phone-display" id="sessionPhoneDisplay">0712345678</div>
+            <p class="form-subtitle">Connected to CrashGame Live Signal Engine</p>
+
+            <div class="signal-preview-card">
+                <div class="signal-label">Next Predicted Round Cashout</div>
+                <div class="signal-multiplier" id="liveMultiplier">2.45x</div>
+                <div class="signal-confidence">● 96.4% Signal Accuracy</div>
+            </div>
+
+            <button type="button" class="btn-submit" style="margin-bottom: 10px;" onclick="refreshPreviewSignal()">🔄 REFRESH LIVE SIGNAL</button>
+            <button type="button" class="btn-logout" onclick="handleLogout()">LOG OUT</button>
+        </div>
+    </div>
+
+    <footer class="page-footer">
+        &copy; 2026 CrashGame. All rights reserved.
+    </footer>
+
+    <div id="toast-container"></div>
+
+    <script>
+        // Prevent double-tap zoom on mobile devices
+        document.addEventListener('touchend', (function() {
+            let lastTouch = 0;
+            return function(e) {
+                const now = Date.now();
+                if (now - lastTouch <= 300) {
+                    e.preventDefault();
+                }
+                lastTouch = now;
+            };
+        })(), false);
+
+        // Normalize phone numbers by removing spaces/dashes so '0712 345 678' matches '0712345678'
+        function normalizePhone(raw) {
+            return raw.replace(/[\s\-()]/g, '');
+        }
+
+        // Validate local phone starting with 0 and having 9-12 digits total
+        function isValidLocalPhone(phone) {
+            return /^0\d{8,11}$/.test(phone);
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerText = message;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 2600);
+        }
+
+        // Switch between Login and Register views smoothly
+        function switchAuthMode(mode) {
+            const loginView = document.getElementById('loginView');
+            const registerView = document.getElementById('registerView');
+            const tabLogin = document.getElementById('tabLogin');
+            const tabRegister = document.getElementById('tabRegister');
+            const bonusSubtitle = document.getElementById('bonusSubtitle');
+
+            if (mode === 'register') {
+                loginView.classList.add('hidden');
+                registerView.classList.remove('hidden');
+                tabLogin.classList.remove('active');
+                tabRegister.classList.add('active');
+                bonusSubtitle.innerText = '🎰 Create your account 🚀 Unlock live signals 🎯';
+            } else {
+                registerView.classList.add('hidden');
+                loginView.classList.remove('hidden');
+                tabRegister.classList.remove('active');
+                tabLogin.classList.add('active');
+                bonusSubtitle.innerText = '🎰 Play Aviator 🚀 Get free accurate signals 🎯';
+            }
+        }
+
+        // Show simulated dashboard state after authentication
+        function showDashboardState(phone) {
+            document.getElementById('authCard').classList.add('hidden');
+            const dash = document.getElementById('dashboardPreview');
+            dash.classList.remove('hidden');
+            document.getElementById('sessionPhoneDisplay').innerText = phone;
+            refreshPreviewSignal();
+        }
+
+        function refreshPreviewSignal() {
+            const val = (Math.random() * (4.20 - 1.45) + 1.45).toFixed(2);
+            document.getElementById('liveMultiplier').innerText = val + 'x';
+        }
+
+        // Restore remembered phone or active session on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const activeSession = localStorage.getItem('betrush_session');
+            if (activeSession) {
+                showDashboardState(activeSession);
+                return;
+            }
+
+            const savedPhone = localStorage.getItem('betrush_remembered_phone');
+            if (savedPhone) {
+                document.getElementById('loginPhone').value = savedPhone;
+            }
+        });
+
+        // Handle Login submission
+        function handleLogin(e) {
+            e.preventDefault();
+            const rawPhone = document.getElementById('loginPhone').value.trim();
+            const phoneNumber = normalizePhone(rawPhone);
+            const password = document.getElementById('loginPassword').value;
+            const remember = document.getElementById('remember').checked;
+
+            if (!isValidLocalPhone(phoneNumber)) {
+                showToast('Phone number must start with 0 (e.g. 0712 345 678)');
+                return;
+            }
+
+            if (!password) {
+                showToast('Please enter your password');
+                return;
+            }
+
+            const localData = localStorage.getItem('betrush_user');
+            if (localData) {
+                try {
+                    const parsed = JSON.parse(localData);
+                    if (parsed.phoneNumber === phoneNumber && parsed.password === password) {
+                        if (remember) {
+                            localStorage.setItem('betrush_remembered_phone', rawPhone);
+                        } else {
+                            localStorage.removeItem('betrush_remembered_phone');
+                        }
+
+                        localStorage.setItem('betrush_session', phoneNumber);
+                        showToast('Login Successful!');
+
+                        setTimeout(() => {
+                            showDashboardState(phoneNumber);
+                        }, 600);
+                        return;
+                    } else {
+                        showToast('Incorrect phone number or password');
+                        return;
+                    }
+                } catch (err) {}
+            }
+
+            showToast('Account not found. Please register first.');
+        }
+
+        // Handle Registration submission
+        function handleRegister(e) {
+            e.preventDefault();
+            const rawPhone = document.getElementById('regPhone').value.trim();
+            const phoneNumber = normalizePhone(rawPhone);
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+
+            if (!isValidLocalPhone(phoneNumber)) {
+                showToast('Phone number must start with 0 (e.g. 0712 345 678)');
+                return;
+            }
+
+            if (password.length < 6) {
+                showToast('Password must be at least 6 characters');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showToast('Passwords do not match');
+                return;
+            }
+
+            const userData = {
+                phoneNumber: phoneNumber,
+                password: password,
+                createdAt: new Date().toISOString()
+            };
+
+            localStorage.setItem('betrush_user', JSON.stringify(userData));
+            localStorage.setItem('betrush_remembered_phone', rawPhone);
+            localStorage.setItem('betrush_session', phoneNumber);
+
+            showToast('Account Created! Logging in...');
+
+            setTimeout(() => {
+                showDashboardState(phoneNumber);
+            }, 600);
+        }
+
+        // Handle Logout from simulated dashboard
+        function handleLogout() {
+            localStorage.removeItem('betrush_session');
+            document.getElementById('dashboardPreview').classList.add('hidden');
+            document.getElementById('authCard').classList.remove('hidden');
+            document.getElementById('loginPassword').value = '';
+            switchAuthMode('login');
+
+            const savedPhone = localStorage.getItem('betrush_remembered_phone');
+            if (savedPhone) {
+                document.getElementById('loginPhone').value = savedPhone;
+            }
+            showToast('Logged out successfully');
+        }
+    </script>
+</body>
+
+</html>

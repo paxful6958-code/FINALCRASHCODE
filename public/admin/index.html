@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tradexora - Admin Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-900 text-slate-100 min-h-screen font-sans">
+
+    <!-- Header -->
+    <header class="bg-slate-800 border-b border-slate-700 px-6 py-4 flex justify-between items-center">
+        <h1 class="text-xl font-bold tracking-wide text-emerald-400">TRADEXORA ADMIN PANEL</h1>
+        <div class="flex items-center space-x-4">
+            <span id="adminStatus" class="text-xs bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full border border-emerald-500/30">Admin Connected</span>
+            <button onclick="logoutAdmin()" class="bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-500/30 text-xs px-3 py-1.5 rounded transition">Logout</button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
+
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-lg">
+                <h3 class="text-slate-400 text-sm font-medium">Total Users</h3>
+                <p id="totalUsersCount" class="text-3xl font-bold mt-2">0</p>
+            </div>
+            <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-lg">
+                <h3 class="text-slate-400 text-sm font-medium">Total System Real Balance</h3>
+                <p id="totalSystemBalance" class="text-3xl font-bold mt-2 text-emerald-400">KES 0.00</p>
+            </div>
+            <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-lg">
+                <h3 class="text-slate-400 text-sm font-medium">Active Session</h3>
+                <p class="text-sm font-semibold mt-3 text-slate-300 truncate" id="adminIdDisplay">Admin ID Configured</p>
+            </div>
+        </div>
+
+        <!-- PENDING KYC VERIFICATION QUEUE -->
+        <div class="bg-slate-800 border border-slate-700 rounded-xl shadow-lg overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-700 flex justify-between items-center">
+                <h2 class="text-lg font-semibold flex items-center gap-2">
+                    <span>Pending Account Verifications</span>
+                    <span id="pendingKycCount" class="bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs px-2.5 py-0.5 rounded-full">0</span>
+                </h2>
+                <button onclick="loadPendingKYC()" class="bg-slate-700 hover:bg-slate-600 text-xs px-3 py-1.5 rounded transition">Refresh KYC</button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-900/50 text-slate-400 text-xs uppercase tracking-wider border-b border-slate-700">
+                            <th class="py-3 px-6">Trader (Name & Phone)</th>
+                            <th class="py-3 px-6">Registered On</th>
+                            <th class="py-3 px-6">Status</th>
+                            <th class="py-3 px-6 text-right">Review Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="kycTableBody" class="divide-y divide-slate-700 text-sm"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Users Table Section -->
+        <div class="bg-slate-800 border border-slate-700 rounded-xl shadow-lg overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-700 flex justify-between items-center">
+                <h2 class="text-lg font-semibold">User Accounts & Wallets</h2>
+                <button onclick="loadUsers()" class="bg-slate-700 hover:bg-slate-600 text-xs px-3 py-1.5 rounded transition">Refresh Data</button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-900/50 text-slate-400 text-xs uppercase tracking-wider border-b border-slate-700">
+                            <th class="py-3 px-6">Full Name / Phone</th>
+                            <th class="py-3 px-6">Role</th>
+                            <th class="py-3 px-6">KYC Status</th>
+                            <th class="py-3 px-6">Real Balance</th>
+                            <th class="py-3 px-6">Demo Balance</th>
+                            <th class="py-3 px-6 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody" class="divide-y divide-slate-700 text-sm"></tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Funding Modal -->
+    <div id="fundModal" class="fixed inset-0 bg-black/70 flex items-center justify-center hidden z-50">
+        <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 w-full max-w-md shadow-2xl">
+            <h3 class="text-lg font-bold mb-4" id="modalTitle">Fund User Wallet</h3>
+            <input type="hidden" id="modalUserId">
+
+            <div class="mb-4">
+                <label class="block text-xs text-slate-400 uppercase mb-2">Action Type</label>
+                <select id="modalAction" class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-slate-100 focus:outline-none focus:border-emerald-500">
+                    <option value="add">Add Funds (Deposit)</option>
+                    <option value="subtract">Subtract Funds (Deduct)</option>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-xs text-slate-400 uppercase mb-2">Target Wallet</label>
+                <select id="modalWalletType" class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-slate-100 focus:outline-none focus:border-emerald-500">
+                    <option value="realBalance">Real Balance (KES)</option>
+                    <option value="demoBalance">Demo Balance (KES)</option>
+                </select>
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-xs text-slate-400 uppercase mb-2">Amount (KES)</label>
+                <input type="number" id="modalAmount" placeholder="0.00" step="0.01" class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-slate-100 focus:outline-none focus:border-emerald-500">
+            </div>
+
+            <div class="flex justify-end space-x-3">
+                <button onclick="closeModal()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded text-sm transition">Cancel</button>
+                <button onclick="submitFunding()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-sm font-semibold transition">Confirm Update</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ADMIN_ID = localStorage.getItem('tradexora_admin_id');
+
+        if (!ADMIN_ID) {
+            window.location.href = '/admin-login';
+        }
+
+        document.getElementById('adminIdDisplay').innerText = `Admin ID Configured`;
+
+        function logoutAdmin() {
+            localStorage.removeItem('tradexora_admin_id');
+            window.location.href = '/admin-login';
+        }
+
+        async function loadUsers() {
+            if (!ADMIN_ID) return;
+
+            try {
+                const response = await fetch('/api/admin/users', {
+                    headers: { 'x-admin-id': ADMIN_ID }
+                });
+                const data = await response.json();
+
+                if (!data.success) {
+                    alert('Session expired or access denied.');
+                    logoutAdmin();
+                    return;
+                }
+
+                const users = data.users;
+                document.getElementById('totalUsersCount').innerText = users.length;
+
+                let totalRealBalance = 0;
+                const tbody = document.getElementById('usersTableBody');
+                tbody.innerHTML = '';
+
+                if (users.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-slate-400 text-xs">No users registered yet.</td></tr>`;
+                }
+
+                users.forEach(user => {
+                    const realBal = (user.wallet && user.wallet.realBalance) !== undefined ? Number(user.wallet.realBalance) : 0;
+                    const demoBal = (user.wallet && user.wallet.demoBalance) !== undefined ? Number(user.wallet.demoBalance) : 10000;
+                    totalRealBalance += realBal;
+
+                    const kycStatus = user.kycStatus || 'PENDING';
+                    const kycBadgeColor = kycStatus === 'VERIFIED' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' :
+                        kycStatus === 'REJECTED' ? 'bg-red-500/20 text-red-400 border-red-500/30' :
+                        'bg-amber-500/20 text-amber-400 border-amber-500/30';
+
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-700/40 transition';
+                    tr.innerHTML = `
+                        <td class="py-4 px-6">
+                            <div class="font-medium text-slate-200">${user.fullName || 'Trader'}</div>
+                            <div class="text-xs text-slate-400 font-mono">${user.phoneNumber}</div>
+                        </td>
+                        <td class="py-4 px-6">
+                            <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                                ${user.role || 'user'}
+                            </span>
+                        </td>
+                        <td class="py-4 px-6">
+                            <span class="px-2.5 py-1 rounded-full text-xs font-semibold border ${kycBadgeColor}">
+                                ${kycStatus}
+                            </span>
+                        </td>
+                        <td class="py-4 px-6 font-mono text-emerald-400">KES ${realBal.toFixed(2)}</td>
+                        <td class="py-4 px-6 font-mono text-slate-400">KES ${demoBal.toFixed(2)}</td>
+                        <td class="py-4 px-6 text-right">
+                            <button onclick="openModal('${user._id}', '${user.fullName} (${user.phoneNumber})')" class="bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded text-xs font-medium transition">
+                                Manage Funds
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                document.getElementById('totalSystemBalance').innerText = `KES ${totalRealBalance.toFixed(2)}`;
+            } catch (err) {
+                console.error('Error fetching users:', err);
+            }
+        }
+
+        async function loadPendingKYC() {
+            if (!ADMIN_ID) return;
+
+            try {
+                const response = await fetch('/api/admin/kyc-pending', {
+                    headers: { 'x-admin-id': ADMIN_ID }
+                });
+                const data = await response.json();
+                if (!data.success) return;
+
+                const users = data.users || [];
+                document.getElementById('pendingKycCount').innerText = users.length;
+
+                const tbody = document.getElementById('kycTableBody');
+                tbody.innerHTML = '';
+
+                if (users.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-slate-400 text-xs">No pending account verifications found.</td></tr>`;
+                    return;
+                }
+
+                users.forEach(user => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-700/40 transition';
+                    tr.innerHTML = `
+                        <td class="py-4 px-6">
+                            <div class="font-medium text-slate-200">${user.fullName || 'Trader'}</div>
+                            <div class="text-xs text-slate-400 font-mono">${user.phoneNumber}</div>
+                        </td>
+                        <td class="py-4 px-6 text-xs text-slate-400">
+                            ${new Date(user.createdAt).toLocaleString()}
+                        </td>
+                        <td class="py-4 px-6">
+                            <span class="px-2.5 py-1 rounded-full text-xs font-semibold border bg-amber-500/20 text-amber-400 border-amber-500/30">PENDING</span>
+                        </td>
+                        <td class="py-4 px-6 text-right space-x-2">
+                            <button onclick="submitKycAction('${user._id}', 'VERIFIED')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded text-xs font-semibold transition">Approve</button>
+                            <button onclick="submitKycAction('${user._id}', 'REJECTED')" class="bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-500/30 px-3 py-1.5 rounded text-xs font-semibold transition">Reject</button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                console.error('Error loading pending KYC:', err);
+            }
+        }
+
+        async function submitKycAction(userId, action) {
+            if (!confirm(`Are you sure you want to mark this user as ${action}?`)) return;
+
+            try {
+                const response = await fetch('/api/admin/kyc-action', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-admin-id': ADMIN_ID
+                    },
+                    body: JSON.stringify({ userId, action })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    alert(data.message);
+                    loadPendingKYC();
+                    loadUsers();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (err) {
+                alert('Failed to connect to server.');
+            }
+        }
+
+        function openModal(userId, label) {
+            document.getElementById('modalUserId').value = userId;
+            document.getElementById('modalTitle').innerText = `Manage Funds for ${label}`;
+            document.getElementById('modalAmount').value = '';
+            document.getElementById('fundModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('fundModal').classList.add('hidden');
+        }
+
+        async function submitFunding() {
+            const userId = document.getElementById('modalUserId').value;
+            const action = document.getElementById('modalAction').value;
+            const walletType = document.getElementById('modalWalletType').value;
+            const amount = parseFloat(document.getElementById('modalAmount').value);
+
+            if (isNaN(amount) || amount <= 0) {
+                alert('Please enter a valid amount greater than 0.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/admin/fund-wallet', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-admin-id': ADMIN_ID
+                    },
+                    body: JSON.stringify({ userId, action, walletType, amount })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    alert(data.message);
+                    closeModal();
+                    loadUsers();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (err) {
+                alert('Failed to connect to server.');
+            }
+        }
+
+        loadUsers();
+        loadPendingKYC();
+    </script>
+</body>
+
+</html>
